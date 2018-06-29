@@ -2,6 +2,7 @@ package com.paidsurvey.paidsurveymoney
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,11 +22,10 @@ class PageFragment :Fragment() {
         val NAME = "Name"
 
         fun newInstance(url: String,name:String): PageFragment {
-
             val args = Bundle()
             args.putString(URL, url)
-            args.putString(NAME, name)
             val fragment = PageFragment()
+            args.putString(NAME, name)
             fragment.arguments = args
             return fragment
         }
@@ -40,9 +40,6 @@ class PageFragment :Fragment() {
 
         val view: View = inflater!!.inflate(R.layout.fragment_webview, container, false)
         val webView = view.findViewById(R.id.webview) as WebView
-
-        val activity = activity as Activity_Home?
-        activity!!.setActionBarHome(mName)
         val webSettings = webView.getSettings()
         webSettings.setJavaScriptEnabled(true)
         webView.setHorizontalScrollBarEnabled(true)

@@ -8,24 +8,24 @@ import android.support.v4.app.FragmentManager
 import kotlinx.android.synthetic.main.activity_home.*
 import android.view.LayoutInflater
 import android.support.v4.app.FragmentPagerAdapter
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.view.ViewGroup
 import android.widget.TextView
 import java.util.*
+import android.support.v4.view.ViewPager.OnPageChangeListener
 
 
 class Activity_Home : AppCompatActivity() {
     private val mTabLayout: TabLayout? = null
     private val mTabsIcons = intArrayOf(R.drawable.search, R.drawable.search, R.drawable.search,R.drawable.search)
-    val maurlArray = arrayOf("https://www.clixsense.com/?r=7407583&s=101",
-            "https://www.prizerebel.com/index.php?r=abdullashamsi",
-            "http://palmresearch.com/ref/1644593","http://paidsurveyuae.blogspot.com/")
+
     var mUrlArray= ArrayList<UrlModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-        setActionBarHome("Clixsense")
+        setActionBarHome("")
 
         var obj1=UrlModel("https://www.clixsense.com/?r=7407583&s=101","Clixsense")
         mUrlArray.add(obj1)
@@ -36,7 +36,28 @@ class Activity_Home : AppCompatActivity() {
         var obj4=UrlModel("http://paidsurveyuae.blogspot.com/","Help & Tips")
         mUrlArray.add(obj4)
         val pagerAdapter = MyPagerAdapter(supportFragmentManager,mUrlArray)
-        viewPager.setAdapter(pagerAdapter);
+
+        viewPager.setAdapter(pagerAdapter)
+        viewPager.addOnPageChangeListener(object : OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {
+                var title=pagerAdapter.getPageTitle(viewPager.currentItem)
+                setActionBarHome(title as String)
+
+            }
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                var title=pagerAdapter.getPageTitle(viewPager.currentItem)
+                setActionBarHome(title as String)
+
+            }
+
+            override fun onPageSelected(position: Int) {
+                // Check if this is the page you want.
+                var title=pagerAdapter.getPageTitle(viewPager.currentItem)
+                setActionBarHome(title as String)
+
+            }
+        })
+
         tab_layout!!.setupWithViewPager(viewPager)
 
         for (i in 0 until tab_layout.getTabCount()) {
@@ -49,9 +70,6 @@ class Activity_Home : AppCompatActivity() {
 
     private inner class MyPagerAdapter (fragmentManager: FragmentManager, maurlArray: ArrayList<UrlModel>) : FragmentPagerAdapter(fragmentManager) {
 
-        val PAGE_COUNT = 3
-
-        private val mTabsTitle = arrayOf("Recents", "Favorites", "Nearby")
 
         fun getTabView(position: Int): View {
             // Given you have a custom layout in `res/layout/custom_tab.xml` with a TextView and ImageView
@@ -63,21 +81,17 @@ class Activity_Home : AppCompatActivity() {
 
         override fun getItem(pos: Int): Fragment? {
             var obj=mUrlArray.get(pos)
+            Log.d("sdsf",obj.name)
             return PageFragment.newInstance(obj.url,obj.name)
-//            when (pos) {
-//                0 -> return PageFragment.newInstance(1)
-//                1 -> return PageFragment.newInstance(2)
-//                2 -> return PageFragment.newInstance(3)
-//            }
-            return null
         }
 
         override fun getCount(): Int {
-            return maurlArray.size
+            return mUrlArray.size
         }
 
         override fun getPageTitle(position: Int): CharSequence? {
-            return maurlArray[position]
+            var obj=mUrlArray.get(position)
+            return obj.name
         }
     }
     fun setActionBarHome(mName: String) {
