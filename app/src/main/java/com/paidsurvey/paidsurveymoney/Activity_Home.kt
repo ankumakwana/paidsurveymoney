@@ -2,7 +2,6 @@ package com.paidsurvey.paidsurveymoney
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import kotlinx.android.synthetic.main.activity_home.*
@@ -11,15 +10,15 @@ import android.support.v4.app.FragmentPagerAdapter
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
-import android.view.ViewGroup
 import android.widget.TextView
 import java.util.*
 import android.support.v4.view.ViewPager.OnPageChangeListener
+import android.support.v7.app.ActionBar
+
 
 
 class Activity_Home : AppCompatActivity() {
-    private val mTabLayout: TabLayout? = null
-    private val mTabsIcons = intArrayOf(R.drawable.search, R.drawable.search, R.drawable.search,R.drawable.search)
+    private val mTabsIcons = intArrayOf(R.drawable.logo_one, R.drawable.logo_two, R.drawable.logo_four,R.drawable.logo_three)
 
     var mUrlArray= ArrayList<UrlModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,9 +26,9 @@ class Activity_Home : AppCompatActivity() {
         setContentView(R.layout.activity_home)
         setActionBarHome("")
 
-        var obj1=UrlModel("https://www.clixsense.com/?r=7407583&s=101","Clixsense")
+        var obj1=UrlModel("https://www.prizerebel.com/index.php?r=abdullashamsi","Prize Rebel")
         mUrlArray.add(obj1)
-        var obj2=UrlModel("https://www.prizerebel.com/index.php?r=abdullashamsi","Prize Rebel")
+        var obj2=UrlModel("https://www.clixsense.com/?r=7407583&s=101","Clixsense")
         mUrlArray.add(obj2)
         var obj3=UrlModel( "http://palmresearch.com/ref/1644593","Palmresearch")
         mUrlArray.add(obj3)
@@ -95,13 +94,16 @@ class Activity_Home : AppCompatActivity() {
         }
     }
     fun setActionBarHome(mName: String) {
-        val actionBarLayout = layoutInflater.inflate(R.layout.toolbar, null) as ViewGroup
+       // val actionBarLayout = layoutInflater.inflate(R.layout.toolbar, null) as ViewGroup
         var actionBar = supportActionBar
         actionBar!!.setDisplayShowHomeEnabled(false);
+        actionBar!!.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setCustomView(actionBarLayout);
-        var title=actionBarLayout.findViewById<TextView>(R.id.title)
+        val viewOBJ = layoutInflater.inflate(R.layout.toolbar, null)
+        val layoutParams = android.support.v7.app.ActionBar.LayoutParams(android.app.ActionBar.LayoutParams.MATCH_PARENT, android.app.ActionBar.LayoutParams.MATCH_PARENT)
+        actionBar.setCustomView(viewOBJ, layoutParams)
+        var title=viewOBJ.findViewById<TextView>(R.id.title)
         title.setText(mName)
 
 
